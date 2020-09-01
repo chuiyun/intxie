@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/cart.css"/>
+</head>
+<body>
+<div id="container">
+    <!-- 头部-->
+    <%- include("./header.html")%>
+    <!-- 内容-->
+<!--    id="content"-->
+    <div>
+        <div id="contentTop">
+            <div id="wenzi1">
+                LITTLE BAG
+            </div>
+            <div id="wenzi2">
+                购物车
+            </div>
+        </div>
+        <div id="cartProduct">
+            <table>
+            <thead>
+            <tr>
+                <td><input type="checkbox" id="checkAll"></td>
+                <td></td>
+                <td>商品名</td>
+                <td>数量</td>
+                <td>价格</td>
+                <td>小计</td>
+                <td>删除</td>
+            </tr>
+            </thead>
+            <tbody id="tbProduct">
+            <%for(var i=0;i<productList.length;i++){%>
+            <tr>
+                <td><input type="checkbox" data-sid="<%= productList[i].sid%>"></td>
+                <td><img src="<%= productList[i].feng%>" alt=""></td>
+                <td><%= productList[i].title%></td>
+                <td><%= productList[i].num%></td>
+                <td><%= productList[i].price%></td>
+                <td class="sub"><%= productList[i].price*productList[i].num%></td>
+                <td><span class="del" data-rid="<%= productList[i].sid%>">删除</span></td>
+            </tr>
+            <%}%>
+            </tbody>
+            </table>
+        </div>
+        <hr/>
+        <div id="contentBottom">
+            <div id="contentBottomOne">
+                总计:￥<span id="spanTotal">0</span>
+            </div>
+            <div id="contentBottomTwo">
+                现在结算
+            </div>
+        </div>
+      <div>
+    </div>
+    <%- include("./footer.html")%>
+</div>
+</div>
+<script type="text/javascript" src="js/jquery.3.4.0.js"></script>
+<script type="text/javascript" src="js/javascript.js"></script>
+<script type="text/javascript">
+    $("#tbProduct").on('click',"input[type='checkbox']",function (){
+        //1.判断checkbox是选中还是取消
+        //2.获取总金额
+        //3.选中，原来的总金额上，进行加，否则减
+        //4.新的总金额显示在页面上
+        let checked=$(this).prop("checked");//获取是否选中状态
+        let total=Number($("#spanTotal").text());
+        let sub=Number($(this).parent().parent().find(".sub").text());//找到商品小计
+        if(checked) {
+            total+=sub;
+        }
+        else {
+            total-=sub;
+        }
+        $("#spanTotal").text(total);
+
+        $("#contentBottomTwo").click(function (){
+            //用户选中商品，获取对应的rid;
+            //得到checkbox的checked属性为true的这些元素
+            let checkedArr=$("#tbProduct input[type='checkbox']:checked");
+            let sid=[];
+            for (let i=0;i<checkedArr.length;i++) {
+                sid.push($(checkedArr[i]).attr("data-sid"));//把选中商品的rid先存入一个数组中
+            }
+            let sidstr=sid.join(",");
+
+            //rid传给服务器进行处理
+            $.ajax({
+                type:"post",
+                url:"/buildOrder",
+                data:"sidstr="+sidstr+"&total="+$("#spanTotal").text(),
+                success:function (data) {
+                    //200跳转到详情
+                    //201 没有登录，跳转到首页
+                    //其他没有提示
+                    alert(data.message);
+                }
+            })
+
+        })
+
+    })
+</script>
+</body>
+</html>
