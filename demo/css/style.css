@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#app {
+    width: 60%;
+    margin: 50px auto 0 auto;
+}
+table {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+thead {
+    text-align: center;
+}
+th {
+    text-align: center;
+}
+.modalBox {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: block;
+}

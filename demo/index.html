@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <input class="form-control form-group" type="text" v-model="search" placeholder="请输入卡号">
+  <table class="table-bordered table-striped">
+      <thead>
+      <tr>
+          <th>学号</th>
+          <th>卡号</th>
+          <th>密码</th>
+          <th>余额</th>
+          <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+            <tr v-for="item in searchList" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.cardId}}</td>
+                <td>{{item.pwd}}</td>
+                <td>{{item.money}}</td>
+                <td>
+                    <button class="btn btn-danger" @click="del(item.id)">删除</button>
+                    <button class="btn btn-warning" @click="modify(item.id)">修改</button>
+                </td>
+            </tr>
+      </tbody>
+  </table>
+<!--    模态框-->
+    <div class="modalBox" v-show="showModels">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" v-text="textDisplay"></h4>
+                </div>
+                <div class="modal-body">
+                   <input class="form-control form-group" type="text" v-model="addForm.id" placeholder="学号">
+                   <input class="form-control form-group" type="text" v-model="addForm.cardId" placeholder="卡号">
+                   <input class="form-control form-group" type="text" v-model="addForm.pwd" placeholder="密码">
+                   <input class="form-control form-group" type="text" v-model="addForm.money" placeholder="余额">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" @click="addN">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="addY">确认</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <button class="btn btn-primary" @click="add">增加</button>
+</div>
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
